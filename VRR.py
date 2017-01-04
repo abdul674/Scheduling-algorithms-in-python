@@ -1,13 +1,24 @@
 import Queue
 
 
+def check_and_put_new_process_in_ready_queue(processes, current_time, current, processes_queue):
+    try:
+        while processes[current]["arrival_time"] <= current_time:
+            processes_queue.put(processes[current])
+            current += 1
+    except IndexError:
+        current += 0
+    finally:
+        return current, processes_queue
+
+
 def check_and_return_process_from_waiting_to_auxiliary_queue(waiting, auxiliary, current_time):
     temp_arr = []
 
-    for index in range(0, len(waiting_queue)):
-        if waiting[index]["return_time"] <= current_time:
-            auxiliary.put(waiting_queue[index])
-            temp_arr.append(index)
+    for i in range(len(waiting_queue)):
+        if waiting[i]["return_time"] <= current_time:
+            auxiliary.put(waiting_queue[i])
+            temp_arr.append(i)
     for i in temp_arr:
         waiting_queue.pop(i)
 
@@ -96,9 +107,13 @@ while process_completed < number_of_process:
     if auxiliary_queue.empty():
         if process_queue.empty():
             ticks += 1
-            w, a = check_and_return_process_from_waiting_to_auxiliary_queue(waiting_queue, auxiliary_queue, ticks)
-            waiting_queue = w
-            auxiliary_queue = a
+            waiting_queue, auxiliary_queue = check_and_return_process_from_waiting_to_auxiliary_queue(waiting_queue,
+                                                                                                      auxiliary_queue,
+                                                                                                      ticks)
+
+            current_process, process_queue = check_and_put_new_process_in_ready_queue(process, ticks,
+                                                                                      process_counter,
+                                                                                      process_queue)
             continue
 
         current_process = process_queue.get()
@@ -116,12 +131,8 @@ while process_completed < number_of_process:
         min(time_quanta, current_process["remaining_time"], current_process["remaining_quanta"])
     current_process["remaining_quanta"] -= remaining_time
 
-    try:
-        while process[process_counter]["arrival_time"] <= ticks:
-            process_queue.put(process[process_counter])
-            process_counter += 1
-    except IndexError:
-        process_counter += 0
+    process_counter, process_queue = check_and_put_new_process_in_ready_queue(process, ticks,
+                                                                              process_counter, process_queue)
 
     w, a = check_and_return_process_from_waiting_to_auxiliary_queue(waiting_queue, auxiliary_queue, ticks)
     waiting_queue = w
