@@ -33,8 +33,8 @@ def take_integer_input(prompt, minimum_value):
                 return inp
             else:
                 print "Invalid Input \"Value must be greater than {min_value}\"".format(min_value=minimum_value-1)
-            except ValueError:
-                print "Invalid Input \"Value must be a valid Integer\""
+        except ValueError:
+            print "Invalid Input \"Value must be a valid Integer\""
 
 time_quanta = take_integer_input("Time Slice: ", 1)
 
