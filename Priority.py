@@ -1,10 +1,17 @@
 import Queue
 
-number_of_process = 0
-try:
-    number_of_process = input("How many processes are there : ")
-except NameError:
-    print "Invalid Input"
+def take_integer_input(prompt, minimum_value):
+    while True:
+        try:
+            inp = int(raw_input(prompt))
+            if inp >= minimum_value:
+                return inp
+            else:
+                print "Invalid Input \"Value must be greater than {min_value}\"".format(min_value=minimum_value-1)
+        except ValueError:
+            print "Invalid Input \"Value must be a valid Integer\""
+
+number_of_process = take_integer_input("How many processes are there : ", 0)
 
 if number_of_process == 0:
     exit()
@@ -14,14 +21,9 @@ process = []
 for index in range(number_of_process):
     number = index + 1
 
-    try:
-        arrival_time = input("Arrival Time of p{number} : ".format(number=number))
-        burst_time = input("Burst Time of p{number} : ".format(number=number))
-        priority = input("Priority of p{number} : ".format(number=number))
-    except NameError:
-        print "Invalid Input\n"
-        index -= 1
-        continue
+    arrival_time = take_integer_input("Arrival Time of p{number} : ".format(number=number), 0)
+    burst_time = take_integer_input("Burst Time of p{number} : ".format(number=number), 1)
+    priority = take_integer_input("Priority of p{number} : ".format(number=number), 0)
 
     process.append({"name": "p{number}".format(number=number),
                     "burst_time": burst_time,
