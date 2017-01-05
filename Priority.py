@@ -21,9 +21,9 @@ process = []
 for index in range(number_of_process):
     number = index + 1
 
-    arrival_time = input("Arrival Time of p{number} : ".format(number=number))
-    burst_time = input("Burst Time of p{number} : ".format(number=number))
-    priority = input("Priority of p{number} : ".format(number=number))
+    arrival_time = take_integer_input("Arrival Time of p{number} : ".format(number=number), 0)
+    burst_time = take_integer_input("Burst Time of p{number} : ".format(number=number), 1)
+    priority = take_integer_input("Priority of p{number} : ".format(number=number), 0)
 
     process.append({"name": "p{number}".format(number=number),
                     "burst_time": burst_time,
